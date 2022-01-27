@@ -34,28 +34,30 @@ def if_out(img, lines):
     width = img.shape[1]
     if lines is None:
         return
-    for line in lines:
-        for x1, y1, x2, y2 in line:
-            # Wykrywamy czy ktoras z linii nie jest w srodku obrazu
-            if x1 > 150 and x1 < width/2:
-                kontra = "w prawo"
-            elif x1 < width-150 and x1 > width/2:
-                kontra = "w lewo"
-            else:
-                kontra = ""
-    return kontra
+    else:
+        for line in lines:
+            for x1, y1, x2, y2 in line:
+                # Wykrywamy czy ktoras z linii nie jest w srodku obrazu
+                if x1 > 150 and x1 < width/2:
+                    kontra = "w prawo"
+                elif x1 < width-150 and x1 > width/2:
+                    kontra = "w lewo"
+                else:
+                    kontra = ""
+        return kontra
 
-# Przetwarzanie obrazu uzyskanego z wideo
+
 def pipeline(image):
+    """Przetwarzanie obrazu uzyskanego z wideo."""
     height = image.shape[0]
     width = image.shape[1]
 
     # Fajny parametr do przebadania - region zainteresowan
     # Ustawiamy wierzcholki obszaru ktory nas interesuje i ma byc wyciety
     region_of_interest_vertices = [
-        (0, height-50),
-        (width / 2, (height / 2)-50),
-        (width, height-50),
+        (0, height-50),                 # upper corner
+        (width / 2, (height / 2)-50),   # left-down corner
+        (width, height-50),             # right-down corner
     ]
     # Konwersja do skali szarosci
     gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -123,8 +125,7 @@ def pipeline(image):
                 [left_x_start, max_y, left_x_end, min_y],
                 [right_x_start, max_y, right_x_end, min_y],
             ]],
-            thickness=5,
-    )
+            thickness=5)
         tekst = if_out(image, [[
                 [left_x_start, max_y, left_x_end, min_y],
                 [right_x_start, max_y, right_x_end, min_y],
@@ -132,6 +133,7 @@ def pipeline(image):
         print(tekst)
     else:
         line_image = image
+
     return line_image   
 
 def main():

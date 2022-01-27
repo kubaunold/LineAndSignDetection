@@ -30,9 +30,15 @@ def main():
 
     while True:
         # get real time image from camera
-        success, img = cam.read()
+        success, frame = cam.read()
+        # rotate 180
+        frame = cv.rotate(frame, cv.ROTATE_180)
         # display photo
-        cv.imshow("Real time footage", img)
+        cv.imshow("Real time footage", frame)
+        cv.imshow("Real time footage with lanes", ld.pipeline(frame))
+
+
+
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
 
