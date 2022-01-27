@@ -1,3 +1,5 @@
+import cv2 as cv
+
 import line_detection as ld
 # import sign_detection as sd
 
@@ -10,10 +12,27 @@ robimy tylko jazde pomiedzy liniami; poki co zostawiamy wykrywaniem
 znakow, bo jest problem z zainstalowaniem tensorflow'a
 """
 
-def main():
-    print("hello there")
+def initialize_camera():
+    # camera resolution
+    frameWidth = 640
+    frameHeight = 480
+    camera = cv.VideoCapture(0)
 
-    
+    # initialize the camera
+    camera.set(3, frameWidth)
+    camera.set(4, frameHeight)
+    return camera
+
+
+def main():
+    print("hello there, I will detect lanes")
+    cam = initialize_camera()
+
+    while True:
+        # get real time image from camera
+        success, img = cam.read()
+        # display photo
+        cv.imshow("Real time footage", img)
 
 
 if __name__ == "__main__":

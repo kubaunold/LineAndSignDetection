@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*- 
 import cv2 as cv
 import numpy as np
-import tensorflow as tf
-from keras.models import load_model
+# import tensorflow as tf
+# from keras.models import load_model
 
 # rozdzielczosc kamery
 frameWidth = 640
@@ -44,10 +44,8 @@ def testing(image):
     else:
         print("Nic mi nie pasuje... :-(")
 
-
-
-# funkcja do wyswietlania wielu obrazów w jednym oknie
 def stackImages(scale, imgArray):
+    """funkcja do wyswietlania wielu obrazów w jednym oknie"""
     rows = len(imgArray)
     cols = len(imgArray[0])
     rowsAvailable = isinstance(imgArray[0], list)
@@ -79,7 +77,6 @@ def stackImages(scale, imgArray):
         ver = hor
     return ver
 
-
 def getContours(img, imgContour):
     """funkcja do znajdywania oraz rysowania konturów na obrazie"""
 
@@ -101,8 +98,6 @@ def getContours(img, imgContour):
 
             testing(ROIresized)
             cv.imshow("Wykryte", ROIresized)
-
-
 
 def main():
     output_video = "kubaimati.mp4"
@@ -133,7 +128,7 @@ def main():
 
         # inicjalizacja wyswietlanych operacji
         imgStack = stackImages(0.8, ([img, imgGray, imgCanny, imgCanny], [imgDil, imgContour, imgContour, tmp]))
-        imgStack = tmp
+        # imgStack = tmp
         cv.imshow("Result", imgStack)
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
