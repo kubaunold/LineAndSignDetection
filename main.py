@@ -1,8 +1,3 @@
-import cv2 as cv
-
-import line_detection as ld
-# import sign_detection as sd
-
 """
 PROGRAM ŁĄCZĄCY WYKRYWANIE ZNAKÓW I LINII NA OBRAZIE
 (w czasie rzeczywistym)
@@ -10,7 +5,23 @@ PROGRAM ŁĄCZĄCY WYKRYWANIE ZNAKÓW I LINII NA OBRAZIE
 [UPDATE 27.01.2022]
 robimy tylko jazde pomiedzy liniami; poki co zostawiamy wykrywaniem
 znakow, bo jest problem z zainstalowaniem tensorflow'a
+
+Usage:
+    manage.py [--debug] [--show_camera]
+
+Options:
+    -h --help          Show this screen.
+    --js               Use physical joystick.
+    -f --file=<file>   A text file containing paths to tub files, one per line. Option may be used more than once.
+    --meta=<key:value> Key/Value strings describing describing a piece of meta data about this drive. Option may be used more than once.
 """
+import cv2 as cv
+from docopt import docopt
+from matplotlib.pyplot import show
+
+import line_detection as ld
+# import sign_detection as sd
+
 
 def initialize_camera():
     # camera resolution
@@ -25,7 +36,13 @@ def initialize_camera():
 
 
 def main():
-    print("hello there, I will detect lanes")
+    arguments = docopt(__doc__)
+    debug = arguments["--debug"]
+    show_camera = arguments["--show_camera"]
+    # print(arguments)
+
+    if(debug):
+        print("hello there, I will detect lanes")
     cam = initialize_camera()
 
     while True:
@@ -33,9 +50,13 @@ def main():
         success, frame = cam.read()
         # rotate 180
         frame = cv.rotate(frame, cv.ROTATE_180)
+        # get a copy with lines on
+        frame_with_lines = frame.copy()
+        frame_with_lines = ld.pipeline(frame_with_lines)
         # display photo
-        cv.imshow("Real time footage", frame)
-        cv.imshow("Real time footage with lanes", ld.pipeline(frame))
+        if(show_camera):
+            cv.imshow("Real time footage", frame)
+            cv.imshow("Real time footage with lanes", frame_with_lines)
 
 
 

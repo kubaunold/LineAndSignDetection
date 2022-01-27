@@ -124,6 +124,11 @@ def pipeline(image):
             [[
                 [left_x_start, max_y, left_x_end, min_y],
                 [right_x_start, max_y, right_x_end, min_y],
+                # adding middle line
+                [
+                    (int)((right_x_start + left_x_start)/2), max_y,
+                    (int)((right_x_end + left_x_end)/2), min_y
+                ]
             ]],
             thickness=5)
         tekst = if_out(image, [[
