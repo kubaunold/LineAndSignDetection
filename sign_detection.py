@@ -3,6 +3,7 @@ import cv2 as cv
 import numpy as np
 # import tensorflow as tf
 # from keras.models import load_model
+import line_detection as ld
 
 # rozdzielczosc kamery
 frameWidth = 640
@@ -106,29 +107,33 @@ def main():
     # główna pętla w której dzieje się przetwarzanie obrazu
     while True:
         success, img = cap.read()
-        imgContour = img.copy()
-        # zblurowanie obrazu
-        imgBlur = cv.GaussianBlur(img, (7, 7), 1)
-        # zmiana palety barw na odcienie szarosci
-        imgGray = cv.cvtColor(imgBlur, cv.COLOR_BGR2GRAY)
+        # imgContour = img.copy()
+        # # zblurowanie obrazu
+        # imgBlur = cv.GaussianBlur(img, (7, 7), 1)
+        # # zmiana palety barw na odcienie szarosci
+        # imgGray = cv.cvtColor(imgBlur, cv.COLOR_BGR2GRAY)
 
-        # TODO parametr do zmiany w okienku
-        threshold1 = 180
-        # TODO parametr do zmiany w okienku
-        threshold2 = 180
-        # wykrywanie konturów za pomocą detektora Canny
-        imgCanny = cv.Canny(imgGray, threshold1, threshold2)
-        kernel = np.ones((5, 5))
-        imgDil = cv.dilate(imgCanny, kernel, iterations=1)
+        # # TODO parametr do zmiany w okienku
+        # threshold1 = 180
+        # # TODO parametr do zmiany w okienku
+        # threshold2 = 180
+        # # wykrywanie konturów za pomocą detektora Canny
+        # imgCanny = cv.Canny(imgGray, threshold1, threshold2)
+        # kernel = np.ones((5, 5))
+        # imgDil = cv.dilate(imgCanny, kernel, iterations=1)
 
-        getContours(imgDil, imgContour)
-        # tmp = ld.pipeline(img)
+        # getContours(imgDil, imgContour)
+        tmp = ld.pipeline(img)
         
 
 
         # inicjalizacja wyswietlanych operacji
-        imgStack = stackImages(0.8, ([img, imgGray, imgCanny, imgCanny], [imgDil, imgContour, imgContour, tmp]))
-        # imgStack = tmp
+        # imgStack = stackImages(0.8, ([img, imgGray, imgCanny, imgCanny], [imgDil, imgContour, imgContour, tmp]))
+        imgStack = tmp
         cv.imshow("Result", imgStack)
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
+
+
+if __name__ == "__main__":
+    main()
