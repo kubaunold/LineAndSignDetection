@@ -33,7 +33,8 @@ def main():
         success, img = cam.read()
         # display photo
         cv.imshow("Real time footage", img)
-
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
 
 if __name__ == "__main__":
     main()
